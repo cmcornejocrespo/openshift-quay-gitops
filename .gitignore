@@ -1,0 +1,13 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets (nunca subir secrets reales a Git)
+# En produccion usar Sealed Secrets o External Secrets Operator
+# *-secret.yaml  # Descomentar si se gestionan secrets fuera de Git

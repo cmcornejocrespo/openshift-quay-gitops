@@ -1,0 +1,46 @@
+apiVersion: quay.redhat.com/v1
+kind: QuayRegistry
+metadata:
+  name: registry
+  namespace: quay-enterprise
+spec:
+  # Secret que contiene config.yaml con la configuracion de Quay
+  configBundleSecret: quay-config-bundle
+  components:
+    # --- Componente principal de Quay ---
+    - kind: quay
+      managed: true
+    # --- Base de datos PostgreSQL ---
+    # PRODUCCION: cambiar a managed: false y proveer instancia externa
+    # (ej. Amazon RDS, Azure Database for PostgreSQL, Crunchy Postgres Operator)
+    - kind: postgres
+      managed: true
+    # --- Escaner de vulnerabilidades Clair ---
+    - kind: clair
+      managed: true
+    # --- PostgreSQL dedicado para Clair ---
+    # PRODUCCION: cambiar a managed: false con DB externa
+    - kind: clairpostgres
+      managed: true
+    # --- Cache Redis ---
+    - kind: redis
+      managed: true
+    # --- Almacenamiento de objetos (NooBaa/MCG via ODF) ---
+    # PRODUCCION: cambiar a managed: false y usar S3/GCS/Azure Blob externo
+    - kind: objectstorage
+      managed: true
+    # --- Autoescalado horizontal de pods ---
+    - kind: horizontalpodautoscaler
+      managed: true
+    # --- Route de OpenShift para acceso externo ---
+    - kind: route
+      managed: true
+    # --- Servicio de mirror de imagenes ---
+    - kind: mirror
+      managed: true
+    # --- Monitoreo (Prometheus ServiceMonitor) ---
+    - kind: monitoring
+      managed: true
+    # --- TLS gestionado por el operador ---
+    - kind: tls
+      managed: true

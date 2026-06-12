@@ -1,0 +1,14 @@
+apiVersion: quay.redhat.com/v1
+kind: QuayRegistry
+metadata:
+  name: registry
+  namespace: quay-enterprise
+spec:
+  components:
+    # Para produccion con infraestructura externa, cambiar managed a false:
+    - kind: postgres
+      managed: true       # -> false cuando se use RDS/Azure DB/Crunchy
+    - kind: objectstorage
+      managed: true       # -> false cuando se use S3/GCS/Azure Blob
+    - kind: clairpostgres
+      managed: true       # -> false cuando se use DB externa para Clair

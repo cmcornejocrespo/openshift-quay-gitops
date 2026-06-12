@@ -1,0 +1,15 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: quay-operator
+  namespace: quay-enterprise
+spec:
+  # Canal especifico para Red Hat Quay 3.16
+  channel: stable-3.16
+  # Nombre del paquete en el catalogo de operadores
+  name: quay-operator
+  # Catalogo oficial de Red Hat en OpenShift
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  # Manual: control explicito de upgrades en flujo GitOps
+  installPlanApproval: Manual

@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quay-registry
+  namespace: openshift-gitops
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # Repositorio GitOps con los manifiestos de Quay
+    repoURL: https://github.com/cmcornejocrespo/openshift-quay-gitops.git
+    targetRevision: main
+    path: clusters/quay/overlays/production
+  destination:
+    # in-cluster: Argo CD despliega en el mismo cluster donde esta instalado
+    server: https://kubernetes.default.svc
+    namespace: quay-enterprise
+  syncPolicy:
+    automated:
+      # Elimina recursos que ya no existen en Git
+      prune: true
+      # Corrige drift automaticamente
+      selfHeal: true
+    syncOptions:
+      # Crea el namespace si no existe
+      - CreateNamespace=true
+      # Requerido para CRDs y recursos gestionados por operadores
+      - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  # Ignora campos que el operador modifica automaticamente
+  ignoreDifferences:
+    - group: operators.coreos.com
+      kind: Subscription
+      jsonPointers:
+        - /spec/startingCSV
+        - /status
