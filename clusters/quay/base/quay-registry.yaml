@@ -3,6 +3,9 @@ kind: QuayRegistry
 metadata:
   name: registry
   namespace: quay-enterprise
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   # Secret que contiene config.yaml con la configuracion de Quay
   configBundleSecret: quay-config-bundle
