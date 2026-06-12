@@ -6,5 +6,5 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
   labels:
     app.kubernetes.io/part-of: quay
-    # Habilita monitoreo del namespace por Prometheus
     openshift.io/cluster-monitoring: "true"
+    argocd.argoproj.io/managed-by: openshift-gitops
